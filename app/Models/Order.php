@@ -14,4 +14,9 @@ class Order extends Model
         return $this->belongsToMany(Food::class, 'food_order',
             'food_id', 'order_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

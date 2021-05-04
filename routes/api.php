@@ -26,3 +26,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/logout', 'AuthController@logout')->middleware('auth:api');
     Route::get('/user', 'AuthController@user')->middleware('auth:api');
 });
+
+Route::group(['prefix' => 'food'], function () {
+    Route::post('/store', 'FoodsController@store')->middleware('auth:api');
+    Route::get('/foods', 'FoodsController@foodsShow')->middleware('auth:api');
+});
