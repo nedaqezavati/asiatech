@@ -6,48 +6,55 @@ use App\Models\Food;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class OrdersController extends Controller
 {
+
+    public function index()
+    {
+        $orders = Order::all();
+        return response()->json($orders);
+    }
+
     public function store(Request $request)
     {
 
         $this->validate($request, [
             'is_delivered' => 'nullable'
         ]);
-        $orders = [];
-        $counts = [];
+        $foodIds = [];
         $preparationTime = [];
         $totalPrice = null;
 
-
-//        Log::debug($request);
-
         $orders = collect($request);
-        Log::debug($orders);
 
         foreach($orders as $order) {
-            Log::debug($order);
             $food = Food::where('id', $order['id'])->first();
-            Log::debug($food);
             $totalPrice = $totalPrice + ( $food->price * $order['counts'] );
-            $counts[$order['id']] = $order['counts'];
+            $foodIds[] = $order['id'];
             $preparationTime[] = $food->preparation_time;
         }
 
         $preparationTime = max($preparationTime);
 
         $order = new Order();
-        $order->user_id = 1;
+        $order->user_id = Auth::id();
         $order->total_price = $totalPrice;
         $order->total_preparation_time = $preparationTime;
         $order->save();
 
-        $order->foods()->sync($orders, false);
+        $order->foods()->attach($foodIds);
 
         return response()->json([
-            'message' => 'Successfully created order!'
+            'message' => 'Successfully created order!',
+            'preparation' => $preparationTime
         ], 201);
+    }
+
+    public function userOrders()
+    {
+        $userOrders = Auth::user()->orders()->get();
+
+        return response()->json($userOrders);
     }
 }
