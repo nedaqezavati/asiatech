@@ -28,13 +28,15 @@ class FoodsController extends Controller
             'preparation_time' => Carbon::createFromTime($request->hours, $request->minutes, $request->seconds)->format("H:i:s"),
             'status' => $request->status,
         ]);
+
         $food->save();
+
         return response()->json([
             'message' => 'Successfully created food!'
         ], 201);
     }
 
-    public function foodsShow()
+    public function index()
     {
         $foods = Food::all();
 

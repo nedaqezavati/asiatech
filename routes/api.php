@@ -29,10 +29,10 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'food'], function () {
     Route::post('/store', 'FoodsController@store')->middleware('auth:api');
-    Route::get('/foods', 'FoodsController@foodsShow');
+    Route::get('/index', 'FoodsController@index');
 });
 
 Route::group(['prefix' => 'order'], function () {
-    Route::post('/store', 'OrdersController@store')->middleware('auth:api');
+    Route::post('/store', 'OrdersController@store');
     Route::get('/orders', 'OrdersController@foodsShow')->middleware('auth:api');
 });
