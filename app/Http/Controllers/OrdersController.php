@@ -20,7 +20,7 @@ class OrdersController extends Controller
     {
 
         $this->validate($request, [
-            'is_delivered' => 'nullable'
+            'is_delivered' => 'required'
         ]);
         $foodIds = [];
         $preparationTime = [];
