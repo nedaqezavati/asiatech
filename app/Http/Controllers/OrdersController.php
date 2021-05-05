@@ -20,7 +20,7 @@ class OrdersController extends Controller
     {
 
         $this->validate($request, [
-            'is_delivered' => 'required'
+            'is_delivered' => 'nullable'
         ]);
         $foodIds = [];
         $preparationTime = [];
@@ -40,6 +40,7 @@ class OrdersController extends Controller
         $order = new Order();
         $order->user_id = Auth::id();
         $order->total_price = $totalPrice;
+        $order->is_delivered = false;
         $order->total_preparation_time = $preparationTime;
         $order->save();
 
